@@ -24,13 +24,18 @@ read -r ACTION
 # Direktori panel
 PANEL_DIR="/var/www/pterodactyl"
 
-# Fungsi untuk install tema
-install_theme() {
-    local THEME_NAME=$1
-    local THEME_URL=$2
+# Fungsi umum untuk install dependensi
+install_dependencies() {
+    echo "🔄 Menginstall dependensi..."
+    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt install -y nodejs
+    sudo npm i -g yarn
+}
 
-    echo "🔄 Menginstall tema $THEME_NAME..."
-    
+# Fungsi untuk install tema Stellar
+install_stellar() {
+    echo "🔄 Menginstall tema Stellar..."
+
     # Hapus folder lama jika ada
     if [ -d "/root/pterodactyl" ]; then
         sudo rm -rf /root/pterodactyl
@@ -38,8 +43,8 @@ install_theme() {
 
     # Download & Ekstrak tema
     cd /root || exit
-    wget -q "$THEME_URL"
-    sudo unzip -o "$(basename "$THEME_URL")"
+    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/stellar.zip"
+    sudo unzip -o "stellar.zip"
     
     # Pindahkan hasil unzip ke /var/www/pterodactyl dan timpa isinya
     sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
@@ -47,10 +52,7 @@ install_theme() {
     # Masuk ke direktori panel
     cd "$PANEL_DIR" || exit
 
-    # Install Node.js dan Yarn
-    curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-    sudo apt install -y nodejs
-    sudo npm i -g yarn
+    install_dependencies
 
     # Jalankan build dan migrasi
     yarn add react-feather
@@ -59,16 +61,103 @@ install_theme() {
     php artisan view:clear
 
     # Hapus file sementara
-    sudo rm "/root/$(basename "$THEME_URL")"
+    sudo rm "/root/stellar.zip"
     sudo rm -rf /root/pterodactyl
 
-    echo -e "                                                       "
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e "${GREEN}[+]                   INSTALL SUCCESS               [+]${NC}"
-    echo -e "${GREEN}[+] =============================================== [+]${NC}"
-    echo -e ""
-    sleep 2
-    clear
+    echo "✅ Tema Stellar berhasil diinstall!"
+}
+
+# Fungsi untuk install tema Darknate
+install_darknate() {
+    echo "🔄 Menginstall tema Darknate..."
+
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    cd /root || exit
+    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/darknate.zip"
+    sudo unzip -o "darknate.zip"
+    
+    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
+
+    cd "$PANEL_DIR" || exit
+
+    install_dependencies
+
+    yarn add react-feather
+    yarn build:production
+    php artisan view:clear
+
+    sudo rm "/root/darknate.zip"
+    sudo rm -rf /root/pterodactyl
+
+    echo "✅ Tema Darknate berhasil diinstall!"
+}
+
+# Fungsi untuk install tema Enigma
+install_enigma() {
+    echo "📲 Masukkan nomor WhatsApp untuk custom Enigma (format: 62xxxxxx):"
+    read -r WA_NUMBER
+
+    echo "🔄 Menginstall tema Enigma..."
+
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    cd /root || exit
+    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/enigma.zip"
+    sudo unzip -o "enigma.zip"
+    
+    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
+
+    cd "$PANEL_DIR" || exit
+
+    install_dependencies
+
+    yarn add react-feather
+    php artisan migrate --force
+    yarn build:production
+    php artisan view:clear
+
+    # Custom nomor WhatsApp
+    sed -i "s/DEFAULT_WA_NUMBER/$WA_NUMBER/g" "$PANEL_DIR/config/enigma.json"
+
+    sudo rm "/root/enigma.zip"
+    sudo rm -rf /root/pterodactyl
+
+    echo "✅ Tema Enigma berhasil diinstall!"
+}
+
+# Fungsi untuk install tema Billing
+install_billing() {
+    echo "🔄 Menginstall tema Billing..."
+
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    cd /root || exit
+    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/billing.zip"
+    sudo unzip -o "billing.zip"
+    
+    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
+
+    cd "$PANEL_DIR" || exit
+
+    install_dependencies
+
+    yarn add react-feather
+    php artisan billing:install stable
+    php artisan migrate --force
+    yarn build:production
+    php artisan view:clear
+
+    sudo rm "/root/billing.zip"
+    sudo rm -rf /root/pterodactyl
+
+    echo "✅ Tema Billing berhasil diinstall!"
 }
 
 # Fungsi untuk uninstall tema
@@ -87,15 +176,12 @@ uninstall_theme() {
     composer install --no-dev --optimize-autoloader
 
     php artisan view:clear
-
     php artisan config:clear
-
     php artisan migrate --seed --force
 
     chown -R www-data:www-data /var/www/pterodactyl/*
 
     php artisan queue:restart
-
     php artisan up
     echo "✅ Tema berhasil dihapus dan panel kembali ke default!"
 }
@@ -109,15 +195,10 @@ if [[ "$ACTION" == "1" ]]; then
     read -r CHOICE
 
     case $CHOICE in
-        1) install_theme "Stellar" "https://github.com/XieTyyOfc/themeinstaller/raw/master/stellar.zip" ;;
-        2) install_theme "Darknate" "https://github.com/XieTyyOfc/themeinstaller/raw/master/darknate.zip" ;;
-        3) 
-            echo "📲 Masukkan nomor WhatsApp untuk custom Enigma (format: 62xxxxxx):"
-            read -r WA_NUMBER
-            install_theme "Enigma" "https://github.com/XieTyyOfc/themeinstaller/raw/master/enigma.zip"
-            sed -i "s/DEFAULT_WA_NUMBER/$WA_NUMBER/g" "$PANEL_DIR/config/enigma.json"
-            ;;
-        4) install_theme "Billing" "https://github.com/XieTyyOfc/themeinstaller/raw/master/billing.zip" ;;
+        1) install_stellar ;;
+        2) install_darknate ;;
+        3) install_enigma ;;
+        4) install_billing ;;
         *) echo "❌ Pilihan tidak valid! Skrip berhenti." ;;
     esac
 elif [[ "$ACTION" == "2" ]]; then
