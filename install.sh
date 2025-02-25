@@ -42,7 +42,7 @@ install_stellar() {
     fi
 
     # Download & Ekstrak tema
-    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/stellar.zip"
+    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/stellarr.zip"
     sudo unzip stellar.zip
     
     # Pindahkan hasil unzip ke /var/www/pterodactyl dan timpa isinya
