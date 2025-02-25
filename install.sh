@@ -45,7 +45,7 @@ install_stellar() {
     wget -q -O stellarr.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/stellarr.zip && \
 sudo unzip stellarr.zip && \
 wait && \
-sudo mv pterodactyl /var/www
+sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
 
     cd /var/www/pterodactyl
 
