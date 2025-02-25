@@ -46,7 +46,7 @@ install_stellar() {
     sudo unzip stellar.zip
     
     # Pindahkan hasil unzip ke /var/www/pterodactyl dan timpa isinya
-    sudo mv /root/pterodactyl /var/www
+    sudo mv -f /root/pterodactyl /var/www
 
     # Masuk ke direktori panel
     cd /var/www/pterodactyl
