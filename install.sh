@@ -72,7 +72,6 @@ install_blueprint() {
         nvm use 20
 
         # Install blueprint
-        cd /var/www/pterodactyl
         apt install -y zip unzip git curl wget
         wget "$(curl -s https://api.github.com/repos/BlueprintFramework/framework/releases/latest | grep 'browser_download_url' | cut -d '"' -f 4)" -O release.zip
         unzip release.zip
@@ -97,7 +96,6 @@ install_stellar() {
     sudo unzip stellarr.zip && \
     wait && \
     sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-
     cd /var/www/pterodactyl
 
     # Install blueprint sebelum dependens
@@ -127,19 +125,16 @@ install_darknate() {
     fi
 
     cd /root || exit
-    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/darknate.zip"
-    sudo unzip -o "darknate.zip"
+    wget -q https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip
+    sudo unzip -o darknate.zip
     
-    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
 
-    cd "$PANEL_DIR" || exit
+    cd /var/www/pterodactyl
 
     install_blueprint
-    install_dependencies
 
-    yarn add react-feather
-    yarn build:production
-    php artisan view:clear
+    blueprint -install darkenate
 
     sudo rm "/root/darknate.zip"
     sudo rm -rf /root/pterodactyl
