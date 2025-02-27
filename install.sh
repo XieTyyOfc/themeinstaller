@@ -125,12 +125,6 @@ install_darknate() {
         sudo rm -rf /root/pterodactyl
     fi
 
-    wget -q -O darknate.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip && \
-    sudo unzip darknate.zip && \
-    wait && \
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    cd /var/www/pterodactyl
-
     install_blueprint
 
     blueprint -install darkenate
