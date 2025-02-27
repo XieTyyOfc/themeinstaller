@@ -72,6 +72,7 @@ install_blueprint() {
         nvm use 20
 
         # Install blueprint
+        cd /var/www/pterodactyl
         apt install -y zip unzip git curl wget
         wget "$(curl -s https://api.github.com/repos/BlueprintFramework/framework/releases/latest | grep 'browser_download_url' | cut -d '"' -f 4)" -O release.zip
         unzip -o release.zip
@@ -128,7 +129,7 @@ install_darknate() {
     wget -q https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip
     sudo unzip -o darknate.zip
     
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    sudo cp -rfT /root/darkenate.blueprint /var/www/pterodactyl
 
     cd /var/www/pterodactyl
 
