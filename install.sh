@@ -24,12 +24,58 @@ read -r ACTION
 # Direktori panel
 PANEL_DIR="/var/www/pterodactyl"
 
+# Fungsi untuk install NVM
+install_nvm() {
+    echo "🔄 Mengecek apakah NVM sudah terinstall..."
+
+    if ! command -v nvm &> /dev/null; then
+        echo "❌ NVM tidak ditemukan. Menginstall NVM..."
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+        
+        echo "🔄 Merestart shell untuk menerapkan NVM..."
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    else
+        echo "✅ NVM sudah terinstall."
+    fi
+}
+
+# Jalankan install_nvm tanpa dipanggil secara eksplisit
+install_nvm
+
 # Fungsi umum untuk install dependensi
 install_dependencies() {
-    echo "🔄 Menginstall dependensi..."
+    echo "🔄 Menginstall Node.js dan Yarn..."
+    nvm install 16
     curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
     sudo apt install -y nodejs
     sudo npm i -g yarn
+
+    echo "🔄 Menggunakan NVM untuk install Node.js versi 16..."
+}
+
+# Fungsi untuk install Blueprint
+install_blueprint() {
+    echo "🔄 Mengecek apakah Blueprint sudah terinstall..."
+
+    # Cek apakah Blueprint sudah terinstall
+    cd "$PANEL_DIR" || exit
+    if yarn list | grep -q blueprint; then
+        echo "✅ Blueprint sudah terinstall. Melewati instalasi."
+    else
+        echo "❌ Blueprint tidak ditemukan. Menginstall Blueprint..."
+
+        # Gunakan NVM untuk install Node.js versi 20
+        echo "🔄 Menggunakan NVM untuk install Node.js versi 20..."
+        nvm install 20
+        nvm use 20
+
+        # Install blueprint
+        yarn add blueprint
+
+        echo "✅ Blueprint berhasil diinstall!"
+    fi
 }
 
 # Fungsi untuk install tema Stellar
@@ -43,12 +89,15 @@ install_stellar() {
 
     # Download & Ekstrak tema
     wget -q -O stellarr.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/stellarr.zip && \
-sudo unzip stellarr.zip && \
-wait && \
-sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    sudo unzip stellarr.zip && \
+    wait && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
 
     cd /var/www/pterodactyl
 
+    # Install blueprint sebelum dependens
+
+    # Install dependensi
     install_dependencies
 
     # Jalankan build dan migrasi
@@ -80,6 +129,7 @@ install_darknate() {
 
     cd "$PANEL_DIR" || exit
 
+    install_blueprint
     install_dependencies
 
     yarn add react-feather
@@ -125,36 +175,6 @@ install_enigma() {
     sudo rm -rf /root/pterodactyl
 
     echo "✅ Tema Enigma berhasil diinstall!"
-}
-
-# Fungsi untuk install tema Billing
-install_billing() {
-    echo "🔄 Menginstall tema Billing..."
-
-    if [ -d "/root/pterodactyl" ]; then
-        sudo rm -rf /root/pterodactyl
-    fi
-
-    cd /root || exit
-    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/billing.zip"
-    sudo unzip -o "billing.zip"
-    
-    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
-
-    cd "$PANEL_DIR" || exit
-
-    install_dependencies
-
-    yarn add react-feather
-    php artisan billing:install stable
-    php artisan migrate --force
-    yarn build:production
-    php artisan view:clear
-
-    sudo rm "/root/billing.zip"
-    sudo rm -rf /root/pterodactyl
-
-    echo "✅ Tema Billing berhasil diinstall!"
 }
 
 # Fungsi untuk uninstall tema
