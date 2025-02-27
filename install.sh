@@ -69,7 +69,6 @@ install_blueprint() {
         # Gunakan NVM untuk install Node.js versi 20
         echo "🔄 Menggunakan NVM untuk install Node.js versi 20..."
         nvm install 20
-        nvm use 20
 
         # Install blueprint
         cd /var/www/pterodactyl
@@ -125,13 +124,13 @@ install_darknate() {
         sudo rm -rf /root/pterodactyl
     fi
 
+    install_blueprint
+
     wget -q -O darknate.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip && \
     sudo unzip darknate.zip && \
     wait && \
     sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    cd /var/www/pterodactyl
-
-    
+    cd /var/www/pterodactyl    
 
     blueprint -install darkenate
 
