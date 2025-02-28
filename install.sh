@@ -166,7 +166,10 @@ install_enigma() {
 
     # Install blueprint sebelum dependens
     # Install dependensi
+    sed -i "s/NOWA/$WA_NUMBER/g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
+    
     install_dependencies
+    wait
 
     yarn add react-feather
     php artisan migrate --force
@@ -174,8 +177,7 @@ install_enigma() {
     php artisan view:clear
 
     # Custom nomor WhatsApp
-    sed -i "s/NOWA/$WA_NUMBER/g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
-
+   
     sudo rm "/root/enigma.zip"
     sudo rm -rf /root/pterodactyl
 
