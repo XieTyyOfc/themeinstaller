@@ -157,14 +157,15 @@ install_enigma() {
         sudo rm -rf /root/pterodactyl
     fi
 
-    cd /root || exit
-    wget -q "https://github.com/XieTyyOfc/themeinstaller/raw/master/enigma.zip"
-    sudo unzip -o "enigma.zip"
-    
-    sudo cp -rfT /root/pterodactyl "$PANEL_DIR"
+    # Download & Ekstrak tema
+    wget -q -O enigma.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/enigma.zip && \
+    sudo unzip enigma.zip && \
+    wait && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    cd /var/www/pterodactyl
 
-    cd "$PANEL_DIR" || exit
-
+    # Install blueprint sebelum dependens
+    # Install dependensi
     install_dependencies
 
     yarn add react-feather
@@ -173,7 +174,7 @@ install_enigma() {
     php artisan view:clear
 
     # Custom nomor WhatsApp
-    sed -i "s/DEFAULT_WA_NUMBER/$WA_NUMBER/g" "$PANEL_DIR/config/enigma.json"
+    sed -i "s/NOWA/$WA_NUMBER/g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
 
     sudo rm "/root/enigma.zip"
     sudo rm -rf /root/pterodactyl
