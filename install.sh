@@ -79,9 +79,14 @@ install_blueprint() {
         bash blueprint.sh < <(yes "y")
 
         echo "✅ Blueprint berhasil diinstall!"
+        
+        # Kembali ke direktori root
+        cd ~
     fi
 }
 
+# Contoh cara memanggil fungsi
+# install_blueprint
 # Fungsi untuk install tema Stellar
 install_stellar() {
     echo "🔄 Menginstall tema Stellar..."
@@ -125,6 +130,7 @@ install_darknate() {
     fi
 
     install_blueprint
+    wait
 
     wget -q -O darknate.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip && \
     sudo unzip darknate.zip && \
