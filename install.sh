@@ -230,6 +230,24 @@ EOF
     echo "✅ Tema IceMinecraft berhasil diinstall!"
 }
 
+install_nook() {
+    echo "🔄 Menginstall tema Nook..."
+
+    cd /var/www/pterodactyl
+    php artisan down
+    curl -L https://github.com/Nookure/NookTheme/releases/latest/download/panel.tar.gz | tar -xzv
+    chmod -R 755 storage/* bootstrap/cache
+    composer install --no-dev --optimize-autoloader -n
+    php artisan view:clear
+    php artisan config:clear
+    php artisan migrate --seed --force
+    chown -R www-data:www-data /var/www/pterodactyl/*
+    php artisan queue:restart
+    php artisan up
+
+    echo "✅ Tema Nook berhasil diinstall!"
+}
+
 # Fungsi untuk uninstall tema
 uninstall_theme() {
     echo "🔄 Menghapus tema dan mereset ke default..."
@@ -263,6 +281,7 @@ if [[ "$ACTION" == "1" ]]; then
     echo "3) Enigma"
     echo "4) Billing"
     echo "5) IceMinecraft"
+    echo "6) Nooktheme"
     read -r CHOICE
 
     case $CHOICE in
@@ -271,6 +290,7 @@ if [[ "$ACTION" == "1" ]]; then
         3) install_enigma ;;
         4) install_billing ;;
         5) install_iceminecraft ;;
+        6) install_nook ;;
         *) echo "❌ Pilihan tidak valid! Skrip berhenti." ;;
     esac
 elif [[ "$ACTION" == "2" ]]; then
