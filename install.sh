@@ -148,9 +148,6 @@ install_darknate() {
 
 # Fungsi untuk install tema Enigma
 install_enigma() {
-    echo "📲 Masukkan nomor WhatsApp untuk custom Enigma (format: 62xxxxxx):"
-    read -r WA_NUMBER
-
     echo "🔄 Menginstall tema Enigma..."
 
     if [ -d "/root/pterodactyl" ]; then
@@ -166,6 +163,9 @@ install_enigma() {
 
     # Install blueprint sebelum dependens
     # Install dependensi
+   echo "📲 Masukkan nomor WhatsApp untuk custom Enigma (format: 62xxxxxx):"
+    read -r WA_NUMBER
+    
     sed -i "s|NOWA|https://wa.me/$WA_NUMBER|g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
 
     install_dependencies
