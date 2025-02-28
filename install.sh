@@ -166,8 +166,8 @@ install_enigma() {
 
     # Install blueprint sebelum dependens
     # Install dependensi
-    sed -i "s/NOWA/$WA_NUMBER/g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
-    
+    sed -i "s|NOWA|https://wa.me/$WA_NUMBER|g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
+
     install_dependencies
     wait
 
