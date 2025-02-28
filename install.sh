@@ -71,8 +71,8 @@ install_blueprint() {
         nvm install 20
 
         # Install blueprint
-        cd /var/www/pterodactyl
         apt install -y zip unzip git curl wget
+        yarn add cross-env
         wget "$(curl -s https://api.github.com/repos/BlueprintFramework/framework/releases/latest | grep 'browser_download_url' | cut -d '"' -f 4)" -O release.zip
         unzip -o release.zip
         chmod +x blueprint.sh
