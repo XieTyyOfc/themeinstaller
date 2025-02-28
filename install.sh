@@ -157,8 +157,8 @@ install_enigma() {
     # Download & Ekstrak tema
     wget -q -O enigma.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/enigma.zip && \
     sudo unzip -o enigma.zip && \
-    wait
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    sync && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl && \
     cd /var/www/pterodactyl
 
     # Install blueprint sebelum dependens
