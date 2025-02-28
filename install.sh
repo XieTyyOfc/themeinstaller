@@ -274,6 +274,39 @@ uninstall_theme() {
     echo "✅ Tema berhasil dihapus dan panel kembali ke default!"
 }
 
+install_nightcore() {
+    echo "🔄 Menginstall tema NightCore..."
+
+    # Hapus folder lama jika ada
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    # Download & Ekstrak tema
+    wget -q -O nightcore.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/nightcore.zip && \
+    sudo unzip nightcore.zip && \
+    wait && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    cd /var/www/pterodactyl
+
+    # Install blueprint sebelum dependens
+
+    # Install dependensi
+    install_dependencies
+
+    # Jalankan build dan migrasi
+    yarn add react-feather
+    php artisan migrate --force
+    yarn build:production
+    php artisan view:clear
+
+    # Hapus file sementara
+    sudo rm /root/nightcore.zip
+    sudo rm /root/pterodactyl
+
+    echo "✅ Tema NightCore berhasil diinstall!"
+}
+
 if [[ "$ACTION" == "1" ]]; then
     echo "Pilih tema yang ingin diinstall:"
     echo "1) Stellar"
