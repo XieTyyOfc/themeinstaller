@@ -218,6 +218,17 @@ install_billing() {
     echo "✅ Tema Billing berhasil diinstall!"
 }
 
+install_iceminecraft() {
+    echo "🔄 Menginstall tema IceMinecraft..."
+
+    # Jalankan bash dulu, lalu kirim input setelahnya
+    bash <(curl -s https://raw.githubusercontent.com/Angelillo15/IceMinecraftTheme/main/install.sh) << EOF
+1
+yes
+EOF
+
+    echo "✅ Tema IceMinecraft berhasil diinstall!"
+}
 
 # Fungsi untuk uninstall tema
 uninstall_theme() {
@@ -251,6 +262,7 @@ if [[ "$ACTION" == "1" ]]; then
     echo "2) Darknate"
     echo "3) Enigma"
     echo "4) Billing"
+    echo "5) IceMinecraft"
     read -r CHOICE
 
     case $CHOICE in
@@ -258,6 +270,7 @@ if [[ "$ACTION" == "1" ]]; then
         2) install_darknate ;;
         3) install_enigma ;;
         4) install_billing ;;
+        5) install_iceminecraft ;;
         *) echo "❌ Pilihan tidak valid! Skrip berhenti." ;;
     esac
 elif [[ "$ACTION" == "2" ]]; then
