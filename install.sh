@@ -76,7 +76,7 @@ install_blueprint() {
         wget "$(curl -s https://api.github.com/repos/BlueprintFramework/framework/releases/latest | grep 'browser_download_url' | cut -d '"' -f 4)" -O release.zip
         unzip -o release.zip
         chmod +x blueprint.sh
-        bash blueprint.sh 
+        bash blueprint.sh < <(yes "y")
 
         echo "✅ Blueprint berhasil diinstall!"
     fi
