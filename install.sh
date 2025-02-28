@@ -248,32 +248,6 @@ install_nook() {
     echo "✅ Tema Nook berhasil diinstall!"
 }
 
-# Fungsi untuk uninstall tema
-uninstall_theme() {
-    echo "🔄 Menghapus tema dan mereset ke default..."
-    cd "$PANEL_DIR" || exit
-
-    php artisan down
-
-    rm -r /var/www/pterodactyl/resources
-
-    curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
-
-    chmod -R 755 storage/* bootstrap/cache
-
-    composer install --no-dev --optimize-autoloader
-
-    php artisan view:clear
-    php artisan config:clear
-    php artisan migrate --seed --force
-
-    chown -R www-data:www-data /var/www/pterodactyl/*
-
-    php artisan queue:restart
-    php artisan up
-    echo "✅ Tema berhasil dihapus dan panel kembali ke default!"
-}
-
 install_nightcore() {
     echo "🔄 Menginstall tema NightCore..."
 
@@ -305,6 +279,33 @@ install_nightcore() {
     sudo rm /root/pterodactyl
 
     echo "✅ Tema NightCore berhasil diinstall!"
+}
+
+
+# Fungsi untuk uninstall tema
+uninstall_theme() {
+    echo "🔄 Menghapus tema dan mereset ke default..."
+    cd "$PANEL_DIR" || exit
+
+    php artisan down
+
+    rm -r /var/www/pterodactyl/resources
+
+    curl -L https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz | tar -xzv
+
+    chmod -R 755 storage/* bootstrap/cache
+
+    composer install --no-dev --optimize-autoloader
+
+    php artisan view:clear
+    php artisan config:clear
+    php artisan migrate --seed --force
+
+    chown -R www-data:www-data /var/www/pterodactyl/*
+
+    php artisan queue:restart
+    php artisan up
+    echo "✅ Tema berhasil dihapus dan panel kembali ke default!"
 }
 
 if [[ "$ACTION" == "1" ]]; then
