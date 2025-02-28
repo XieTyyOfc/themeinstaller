@@ -326,8 +326,8 @@ if [[ "$ACTION" == "1" ]]; then
         5) install_iceminecraft ;;
         6) install_nook ;;
         7) install_nightcore ;;
-        *) pilihan tidak valid! Skrip berhenti." ;;
-    esac
+      *) echo "❌ Pilihan tidak valid! Skrip berhenti." ;;
+          esac
 elif [[ "$ACTION" == "2" ]]; then
     uninstall_theme
 else
