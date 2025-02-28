@@ -163,9 +163,7 @@ install_enigma() {
 
     # Install blueprint sebelum dependens
     # Install dependensi
-   echo "📲 Masukkan nomor WhatsApp untuk custom Enigma (format: 62xxxxxx):"
-    read -r WA_NUMBER
-    
+
     sed -i "s|NOWA|https://wa.me/$WA_NUMBER|g" "/var/www/pterodactyl/resources/scripts/components/dashboard/DashboardContainer.tsx"
 
     install_dependencies
