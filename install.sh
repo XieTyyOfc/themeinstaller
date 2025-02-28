@@ -248,39 +248,6 @@ install_nook() {
     echo "✅ Tema Nook berhasil diinstall!"
 }
 
- install_nightcore() {
-    echo "🔄 Menginstall tema Stellar..."
-
-    # Hapus folder lama jika ada
-    if [ -d "/root/pterodactyl" ]; then
-        sudo rm -rf /root/pterodactyl
-    fi
-
-    # Download & Ekstrak tema
-    wget -q -O nightcore.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/nightcore.zip && \
-    sudo unzip nightcore.zip && \
-    wait && \
-    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    cd /var/www/pterodactyl
-
-    # Install blueprint sebelum dependens
-
-    # Install dependensi
-    install_dependencies
-
-    # Jalankan build dan migrasi
-    yarn add react-feather
-    php artisan migrate --force
-    yarn build:production
-    php artisan view:clear
-
-    # Hapus file sementara
-    sudo rm /root/nightcore.zip
-    sudo rm /root/pterodactyl
-
-    echo "✅ Tema Nightcore berhasil diinstall!"
-}
-
 # Fungsi untuk uninstall tema
 uninstall_theme() {
     echo "🔄 Menghapus tema dan mereset ke default..."
