@@ -184,6 +184,41 @@ install_enigma() {
     echo "✅ Tema Enigma berhasil diinstall!"
 }
 
+install_billing() {
+    echo "🔄 Menginstall tema Billing..."
+
+    # Hapus folder lama jika ada
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    # Download & Ekstrak tema
+    wget -q -O billing.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/billing.zip && \
+    sudo unzip billing.zip && \
+    wait && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    cd /var/www/pterodactyl
+
+    # Install blueprint sebelum dependens
+
+    # Install dependensi
+    install_dependencies
+
+    # Jalankan build dan migrasi
+    yarn add react-feather
+    php artisan billing:install stable
+    php artisan migrate --force
+    yarn build:production
+    php artisan view:clear
+
+    # Hapus file sementara
+    sudo rm /root/billing.zip
+    sudo rm /root/pterodactyl
+
+    echo "✅ Tema Billing berhasil diinstall!"
+}
+
+
 # Fungsi untuk uninstall tema
 uninstall_theme() {
     echo "🔄 Menghapus tema dan mereset ke default..."
