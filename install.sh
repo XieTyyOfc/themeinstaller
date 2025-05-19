@@ -356,12 +356,12 @@ if [[ "$ACTION" == "1" ]]; then
     case $CHOICE in
         1) install_stellar ;;
         2) install_nebula ;;
-        2) install_darknate ;;
-        3) install_enigma ;;
-        4) install_billing ;;
-        5) install_iceminecraft ;;
-        6) install_nook ;;
-        7) install_nightcore ;;
+        3) install_darknate ;;
+        4) install_enigma ;;
+        5) install_billing ;;
+        6) install_iceminecraft ;;
+        7) install_nook ;;
+        8) install_nightcore ;;
       *) echo "❌ Pilihan tidak valid! Skrip berhenti." ;;
           esac
 elif [[ "$ACTION" == "2" ]]; then
