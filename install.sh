@@ -124,34 +124,25 @@ install_stellar() {
 install_nebula() {
     echo "🔄 Menginstall tema Nebula..."
 
-    # Hapus folder lama jika ada
     if [ -d "/root/pterodactyl" ]; then
         sudo rm -rf /root/pterodactyl
     fi
 
-    # Download & Ekstrak tema
-    wget -q -O nebula.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/nebula.zip && \
-    sudo unzip nebula.zip && \
+    install_blueprint
+    wait
+
+    wget -q -O nebula.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip && \
+    sudo unzip darknate.zip && \
     wait && \
     sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
-    cd /var/www/pterodactyl
+    cd /var/www/pterodactyl    
 
-    # Install blueprint sebelum dependens
+    blueprint -install darkenate
 
-    # Install dependensi
-    install_dependencies
+    sudo rm "/root/darknate.zip"
+    sudo rm -rf /root/pterodactyl
 
-    # Jalankan build dan migrasi
-    yarn add react-feather
-    php artisan migrate --force
-    yarn build:production
-    php artisan view:clear
-
-    # Hapus file sementara
-    sudo rm /root/nebula.zip
-    sudo rm /root/pterodactyl
-
-    echo "✅ Tema Nebula berhasil diinstall!"
+    echo "✅ Tema Darknate berhasil diinstall!"
 }
 
 # Fungsi untuk install tema Darknate
