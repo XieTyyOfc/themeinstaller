@@ -131,18 +131,18 @@ install_nebula() {
     install_blueprint
     wait
 
-    wget -q -O nebula.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/darknate.zip && \
-    sudo unzip darknate.zip && \
+    wget -q -O nebula.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/nebula.zip && \
+    sudo unzip nebula.zip && \
     wait && \
     sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
     cd /var/www/pterodactyl    
 
-    blueprint -install darkenate
+    blueprint -install nebula
 
-    sudo rm "/root/darknate.zip"
+    sudo rm "/root/nebula.zip"
     sudo rm -rf /root/pterodactyl
 
-    echo "✅ Tema Darknate berhasil diinstall!"
+    echo "✅ Tema Nebula berhasil diinstall!"
 }
 
 # Fungsi untuk install tema Darknate
