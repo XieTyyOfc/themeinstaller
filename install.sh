@@ -121,6 +121,39 @@ install_stellar() {
     echo "✅ Tema Stellar berhasil diinstall!"
 }
 
+install_nebula() {
+    echo "🔄 Menginstall tema Nebula..."
+
+    # Hapus folder lama jika ada
+    if [ -d "/root/pterodactyl" ]; then
+        sudo rm -rf /root/pterodactyl
+    fi
+
+    # Download & Ekstrak tema
+    wget -q -O nebula.zip https://github.com/XieTyyOfc/themeinstaller/raw/refs/heads/master/nebula.zip && \
+    sudo unzip nebula.zip && \
+    wait && \
+    sudo cp -rfT /root/pterodactyl /var/www/pterodactyl
+    cd /var/www/pterodactyl
+
+    # Install blueprint sebelum dependens
+
+    # Install dependensi
+    install_dependencies
+
+    # Jalankan build dan migrasi
+    yarn add react-feather
+    php artisan migrate --force
+    yarn build:production
+    php artisan view:clear
+
+    # Hapus file sementara
+    sudo rm /root/nebula.zip
+    sudo rm /root/pterodactyl
+
+    echo "✅ Tema Nebula berhasil diinstall!"
+}
+
 # Fungsi untuk install tema Darknate
 install_darknate() {
     echo "🔄 Menginstall tema Darknate..."
@@ -311,16 +344,18 @@ uninstall_theme() {
 if [[ "$ACTION" == "1" ]]; then
     echo "Pilih tema yang ingin diinstall:"
     echo "1) Stellar"
-    echo "2) Darknate"
-    echo "3) Enigma"
-    echo "4) Billing"
-    echo "5) IceMinecraft"
-    echo "6) Nooktheme"
-    echo "7) Nightcore"
+    echo "2) Nebula"
+    echo "3) Darknate"
+    echo "4) Enigma"
+    echo "5) Billing"
+    echo "6) IceMinecraft"
+    echo "7) Nooktheme"
+    echo "8) Nightcore"
     read -r CHOICE
 
     case $CHOICE in
         1) install_stellar ;;
+        2) install_nebula ;;
         2) install_darknate ;;
         3) install_enigma ;;
         4) install_billing ;;
