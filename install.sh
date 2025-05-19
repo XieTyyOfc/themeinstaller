@@ -138,6 +138,7 @@ install_nebula() {
     cd /var/www/pterodactyl    
 
     blueprint -install nebula
+    RETURN
 
     sudo rm "/root/nebula.zip"
     sudo rm -rf /root/pterodactyl
